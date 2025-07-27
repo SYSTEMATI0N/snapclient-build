@@ -58,8 +58,8 @@ jobs:
 
     - name: Debug — list build output
       run: |
-        echo "Searching for snapclient.exe..."
-        dir /s /b snapclient.exe
+         Write-Host "Searching for snapclient.exe..."
+         Get-ChildItem -Recurse -Filter snapclient.exe | Select-Object FullName
 
     - name: Upload snapclient.exe artifact
       uses: actions/upload-artifact@v4
