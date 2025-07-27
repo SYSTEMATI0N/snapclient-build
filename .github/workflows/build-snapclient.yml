@@ -23,7 +23,7 @@ jobs:
       run: |
         git clone https://github.com/microsoft/vcpkg.git
         .\vcpkg\bootstrap-vcpkg.bat
-        .\vcpkg\vcpkg install boost-program-options libflac libogg libvorbis opus soxr
+        .\vcpkg\vcpkg install boost boost-system boost-thread boost-asio libflac libogg libvorbis opus soxr
         echo "VCPKG_ROOT=${{ github.workspace }}\vcpkg" >> $env:GITHUB_ENV
         echo "VCPKG_DEFAULT_TRIPLET=x64-windows" >> $env:GITHUB_ENV
 
