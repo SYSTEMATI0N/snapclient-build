@@ -19,14 +19,30 @@ jobs:
         choco install cmake -y
         choco install git -y
 
+    - name: Restore vcpkg cache
+      uses: actions/cache@v4
+      id: cache-vcpkg
+      with:
+        path: |
+          vcpkg/installed
+          vcpkg/buildtrees
+          vcpkg/packages
+        key: vcpkg-${{ runner.os }}-${{ hashFiles('**/vcpkg.json') }}
+        restore-keys: |
+          vcpkg-${{ runner.os }}-
+
     - name: Setup vcpkg and install dependencies
       run: |
         git clone https://github.com/microsoft/vcpkg.git
         .\vcpkg\bootstrap-vcpkg.bat
-        .\vcpkg\vcpkg install boost boost-system boost-thread boost-asio libflac libogg libvorbis opus soxr
+        .\vcpkg\vcpkg install boost boost-system boost-thread boost-asio flac libogg libvorbis opus soxr
+      env:
+        VCPKG_DEFAULT_TRIPLET: x64-windows
+
+    - name: Set environment variables
+      run: |
         echo "VCPKG_ROOT=${{ github.workspace }}\vcpkg" >> $env:GITHUB_ENV
         echo "VCPKG_DEFAULT_TRIPLET=x64-windows" >> $env:GITHUB_ENV
-
 
     - name: Configure and build snapclient
       run: |
@@ -38,8 +54,13 @@ jobs:
           -DBUILD_CLIENT=ON
         cmake --build . --config Release
 
+    - name: Debug — list build output
+      run: |
+        echo "Searching for snapclient.exe..."
+        dir /s /b snapclient.exe
+
     - name: Upload snapclient.exe artifact
       uses: actions/upload-artifact@v4
       with:
         name: snapclient
-        path: build/client/Release/snapclient.exe
+        path: bin/Release/snapclient.exe
