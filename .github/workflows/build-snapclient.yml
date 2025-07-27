@@ -18,7 +18,6 @@ jobs:
       run: |
         choco install cmake -y
         choco install git -y
-        choco install vcpkg -y
 
     - name: Setup vcpkg
       run: |
