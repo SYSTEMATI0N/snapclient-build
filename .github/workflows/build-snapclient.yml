@@ -63,4 +63,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: snapclient
-        path: build/client/Release/snapclient.exe
+        path: bin/Release/snapclient.exe
