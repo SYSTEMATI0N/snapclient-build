@@ -18,13 +18,13 @@ jobs:
       run: |
         choco install cmake -y
         choco install git -y
-        choco install vcpkg -y
 
     - name: Setup vcpkg and install Boost
       run: |
-        git clone https://github.com/microsoft/vcpkg
+        git clone https://github.com/microsoft/vcpkg.git
         .\vcpkg\bootstrap-vcpkg.bat
         .\vcpkg\vcpkg install boost-program-options
+        echo "VCPKG_ROOT=${{ github.workspace }}\vcpkg" >> $env:GITHUB_ENV
         echo "BOOST_ROOT=${{ github.workspace }}\vcpkg\installed\x64-windows" >> $env:GITHUB_ENV
 
     - name: Configure and build snapclient
@@ -32,7 +32,7 @@ jobs:
         mkdir build
         cd build
         cmake .. -A x64 `
-          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake `
+          -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}\scripts\buildsystems\vcpkg.cmake `
           -DBUILD_SERVER=OFF `
           -DBUILD_CLIENT=ON `
           -DBOOST_ROOT=${{ env.BOOST_ROOT }}
