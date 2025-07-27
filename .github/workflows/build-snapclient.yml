@@ -7,6 +7,10 @@ jobs:
   build:
     runs-on: windows-latest
 
+    env:
+      VCPKG_DISABLE_METRICS: 1
+      VCPKG_DEFAULT_TRIPLET: x64-windows
+
     steps:
     - name: Checkout Snapcast source
       uses: actions/checkout@v3
@@ -34,10 +38,8 @@ jobs:
     - name: Setup vcpkg and install dependencies
       run: |
         git clone https://github.com/microsoft/vcpkg.git
-        .\vcpkg\bootstrap-vcpkg.bat
-        .\vcpkg\vcpkg install boost boost-system boost-thread boost-asio flac libogg libvorbis opus soxr
-      env:
-        VCPKG_DEFAULT_TRIPLET: x64-windows
+        .\vcpkg\bootstrap-vcpkg.bat -disableMetrics
+        .\vcpkg\vcpkg install boost boost-system boost-thread boost-asio libflac libogg libvorbis opus soxr
 
     - name: Set environment variables
       run: |
@@ -63,4 +65,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: snapclient
-        path: bin/Release/snapclient.exe
+        path: build/client/Release/snapclient.exe
