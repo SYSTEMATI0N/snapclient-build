@@ -46,8 +46,9 @@ jobs:
         bootstrap-vcpkg.bat -disableMetrics
 
     - name: Install vcpkg dependencies
+      shell: cmd
       run: |
-        .\vcpkg\vcpkg install boost boost-system boost-thread boost-asio libflac libogg libvorbis opus soxr
+        vcpkg\vcpkg install boost boost-system boost-thread boost-asio libflac libogg libvorbis opus soxr
 
     - name: Set environment variables
       run: |
