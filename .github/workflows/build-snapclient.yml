@@ -33,10 +33,19 @@ jobs:
           vcpkg/packages
         key: vcpkg-${{ runner.os }}-2025-07
 
-    - name: Setup vcpkg and install dependencies
+    - name: Setup vcpkg (only if not exists)
       run: |
-        git clone https://github.com/microsoft/vcpkg.git
-        .\vcpkg\bootstrap-vcpkg.bat -disableMetrics
+        if (!(Test-Path "vcpkg")) {
+          git clone https://github.com/microsoft/vcpkg.git
+        }
+
+    - name: Bootstrap vcpkg
+      shell: cmd
+      run: |
+        vcpkg\bootstrap-vcpkg.bat -disableMetrics
+
+    - name: Install vcpkg dependencies
+      run: |
         .\vcpkg\vcpkg install boost boost-system boost-thread boost-asio libflac libogg libvorbis opus soxr
 
     - name: Set environment variables
@@ -63,4 +72,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: snapclient
-        path: bin/Release/snapclient.exe
+        path: '**/snapclient.exe'
