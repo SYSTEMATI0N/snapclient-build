@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - name: Checkout Snapcast source
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
       with:
         repository: badaix/snapcast
         submodules: true
@@ -35,7 +35,7 @@ jobs:
         cmake --build . --config Release
 
     - name: Upload snapclient.exe artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: snapclient
         path: build/client/Release/snapclient.exe
